@@ -1,0 +1,49 @@
+{
+  "server": {
+    "port": "${PORT:8081}"
+  },
+  "spring": {
+    "application": {
+      "name": "codeassess-backend"
+    },
+    "sql": {
+      "init": {
+        "mode": "never"
+      }
+    },
+    "datasource": {
+      "url": "jdbc:mysql://localhost:3306/codeassess_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC",
+      "driverClassName": "com.mysql.cj.jdbc.Driver",
+      "username": "root",
+      "password": "Apple123!@#"
+    },
+    "jpa": {
+      "database-platform": "org.hibernate.dialect.MySQLDialect",
+      "hibernate": {
+        "ddl-auto": "update"
+      },
+      "show-sql": false,
+      "properties": {
+        "hibernate": {
+          "format_sql": true
+        }
+      }
+    }
+  },
+  "app": {
+    "jwt": {
+      "secret": "9a6e8b12f4c78103c81e1f43a9b74052e18d6174a89052b61a3845d01e4a78bc",
+      "expiration-milliseconds": 86400000
+    },
+    "cors": {
+      "allowed-origins": "http://localhost:5173,http://localhost:3000,https://codeassess-pro.vercel.app"
+    }
+  },
+  "logging": {
+    "level": {
+      "root": "INFO",
+      "com.codeassess": "DEBUG",
+      "org.springframework.security": "INFO"
+    }
+  }
+}

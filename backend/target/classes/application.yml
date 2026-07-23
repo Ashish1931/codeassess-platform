@@ -1,0 +1,41 @@
+server:
+  port: ${PORT:8081}
+
+spring:
+  application:
+    name: codeassess-backend
+  sql:
+    init:
+      mode: never
+  datasource:
+    url: jdbc:h2:mem:codeassessdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL
+    driverClassName: org.h2.Driver
+    username: root
+    password: Apple123!@#
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+app:
+  jwt:
+    secret: 9a6e8b12f4c78103c81e1f43a9b74052e18d6174a89052b61a3845d01e4a78bc
+    expiration-milliseconds: 86400000 # 24 Hours
+  cors:
+    allowed-origins: "http://localhost:5173,http://localhost:3000,https://codeassess-pro.vercel.app"
+
+logging:
+  level:
+    root: INFO
+    com.codeassess: DEBUG
+    org.springframework.security: INFO
