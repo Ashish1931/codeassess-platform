@@ -60,7 +60,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) // Allows H2 Console frames
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/auth/**", "/error").permitAll()
+                        .requestMatchers("/", "/health", "/api/v1", "/api/v1/health", "/auth/**", "/api/v1/auth/**", "/error").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
