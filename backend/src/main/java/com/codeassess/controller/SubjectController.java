@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/subjects")
+@RequestMapping({"/api/v1/subjects", "/subjects"})
 @RequiredArgsConstructor
 public class SubjectController {
 

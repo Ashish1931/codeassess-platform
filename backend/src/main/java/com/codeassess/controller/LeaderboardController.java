@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/leaderboard")
+@RequestMapping({"/api/v1/leaderboard", "/leaderboard"})
 @RequiredArgsConstructor
 public class LeaderboardController {
 

@@ -10,7 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/exams")
+@RequestMapping({"/api/v1/exams", "/exams"})
 @RequiredArgsConstructor
 public class ExamController {
 
