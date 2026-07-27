@@ -61,6 +61,7 @@ com/codeassess/dto/auth/LoginRequest.class
 com/codeassess/dto/exam/ExamResultResponse.class
 com/codeassess/repository/ResultRepository.class
 com/codeassess/entity/Bookmark$BookmarkBuilder.class
+com/codeassess/controller/HealthController.class
 com/codeassess/repository/QuestionOptionRepository.class
 com/codeassess/repository/TestRepository.class
 com/codeassess/dto/QuestionDto.class

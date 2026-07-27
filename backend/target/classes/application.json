@@ -1,6 +1,6 @@
 {
   "server": {
-    "port": "${PORT:8081}"
+    "port": "${PORT:8080}"
   },
   "spring": {
     "application": {
@@ -12,13 +12,16 @@
       }
     },
     "datasource": {
-      "url": "jdbc:mysql://localhost:3306/codeassess_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC",
-      "driverClassName": "com.mysql.cj.jdbc.Driver",
-      "username": "root",
-      "password": "Apple123!@#"
+      "url": "${SPRING_DATASOURCE_URL:jdbc:h2:mem:codeassess_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL}",
+      "username": "${SPRING_DATASOURCE_USERNAME:sa}",
+      "password": "${SPRING_DATASOURCE_PASSWORD:}",
+      "hikari": {
+        "connection-timeout": 15000,
+        "maximum-pool-size": 10,
+        "minimum-idle": 2
+      }
     },
     "jpa": {
-      "database-platform": "org.hibernate.dialect.MySQLDialect",
       "hibernate": {
         "ddl-auto": "update"
       },
@@ -32,11 +35,11 @@
   },
   "app": {
     "jwt": {
-      "secret": "9a6e8b12f4c78103c81e1f43a9b74052e18d6174a89052b61a3845d01e4a78bc",
+      "secret": "${JWT_SECRET:9a6e8b12f4c78103c81e1f43a9b74052e18d6174a89052b61a3845d01e4a78bc}",
       "expiration-milliseconds": 86400000
     },
     "cors": {
-      "allowed-origins": "http://localhost:5173,http://localhost:3000,https://codeassess-pro.vercel.app"
+      "allowed-origins": "${ALLOWED_ORIGINS:http://localhost:5173,http://localhost:3000,https://codeassess-platform.vercel.app,https://codeassess-pro.vercel.app}"
     }
   },
   "logging": {

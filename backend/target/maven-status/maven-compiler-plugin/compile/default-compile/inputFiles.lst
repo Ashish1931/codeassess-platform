@@ -25,6 +25,7 @@
 /home/ashish/Desktop/MCQ/backend/src/main/java/com/codeassess/dto/analytics/LeaderboardDto.java
 /home/ashish/Desktop/MCQ/backend/src/main/java/com/codeassess/service/impl/LeaderboardServiceImpl.java
 /home/ashish/Desktop/MCQ/backend/src/main/java/com/codeassess/config/security/JwtAuthenticationFilter.java
+/home/ashish/Desktop/MCQ/backend/src/main/java/com/codeassess/controller/HealthController.java
 /home/ashish/Desktop/MCQ/backend/src/main/java/com/codeassess/repository/CertificateRepository.java
 /home/ashish/Desktop/MCQ/backend/src/main/java/com/codeassess/dto/QuestionDto.java
 /home/ashish/Desktop/MCQ/backend/src/main/java/com/codeassess/dto/auth/ResetPasswordRequest.java
