@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { testService, subjectService } from '../../services/api';
-import { FileCheck, Plus, Edit2, Trash2, X, Save, Eye } from 'lucide-react';
+import { FileCheck, Plus, Edit2, Trash2, X, Save } from 'lucide-react';
 
 const AdminTests = () => {
   const [tests, setTests] = useState([]);
@@ -107,34 +107,34 @@ const AdminTests = () => {
 
   if (loading) {
     return (
-      <div className="p-8 flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
+      <div className="p-12 flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-14 w-14 border-b-4 border-indigo-600"></div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-700/60 pb-4">
+    <div className="space-y-8 animate-fade-in">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-theme pb-5">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-100 flex items-center gap-2.5">
-            <FileCheck className="text-indigo-400" /> Mock Test Management
+          <h1 className="text-2xl font-extrabold text-theme-primary flex items-center gap-3">
+            <FileCheck className="text-indigo-500" size={28} /> Mock Test Management
           </h1>
-          <p className="text-xs text-slate-400 mt-1">Manage test duration, passing marks, difficulty, and publish status</p>
+          <p className="text-sm font-semibold text-theme-secondary mt-1">Manage test duration, passing marks, difficulty, and publish status</p>
         </div>
 
         <button
           onClick={() => handleOpenModal()}
-          className="btn btn-primary text-xs py-2.5 px-4 flex items-center gap-2 shadow-lg shadow-indigo-500/25"
+          className="btn btn-primary text-sm py-2.5 px-4 flex items-center gap-2 shadow-lg shadow-indigo-500/25"
         >
-          <Plus size={16} /> Create New Test
+          <Plus size={18} /> Create New Test
         </button>
       </div>
 
-      <div className="glass-card overflow-hidden border-slate-800">
+      <div className="glass-card overflow-hidden border-theme">
         <div className="overflow-x-auto">
-          <table className="w-full text-xs text-left">
-            <thead className="bg-slate-900/80 text-slate-400 uppercase font-semibold border-b border-slate-800">
+          <table className="w-full text-sm text-left">
+            <thead className="bg-theme-secondary text-theme-muted uppercase font-bold border-b border-theme">
               <tr>
                 <th className="p-4">Test Title</th>
                 <th className="p-4">Subject</th>
@@ -145,23 +145,23 @@ const AdminTests = () => {
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-theme">
               {tests.map((t) => (
-                <tr key={t.id} className="hover:bg-slate-800/40 transition-colors">
-                  <td className="p-4 font-semibold text-slate-100">{t.title}</td>
-                  <td className="p-4 text-indigo-400 font-semibold">{t.subjectName}</td>
+                <tr key={t.id} className="hover:bg-indigo-500/5 transition-colors">
+                  <td className="p-4 font-bold text-theme-primary">{t.title}</td>
+                  <td className="p-4 text-indigo-500 font-bold">{t.subjectName}</td>
                   <td className="p-4">
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-300">
+                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-theme-input text-theme-secondary border border-theme">
                       {t.difficulty}
                     </span>
                   </td>
-                  <td className="p-4 text-slate-300">{t.durationMinutes} Mins</td>
-                  <td className="p-4 text-slate-300">{t.passingMarks} / {t.totalMarks}</td>
+                  <td className="p-4 font-semibold text-theme-secondary">{t.durationMinutes} Mins</td>
+                  <td className="p-4 font-semibold text-theme-secondary">{t.passingMarks} / {t.totalMarks}</td>
                   <td className="p-4">
                     <select
                       value={t.status}
                       onChange={(e) => handleToggleStatus(t.id, e.target.value)}
-                      className="bg-slate-900 border border-slate-700 text-[11px] font-bold rounded-lg px-2 py-1 text-slate-200"
+                      className="bg-theme-input border border-theme text-xs font-bold rounded-lg px-3 py-1.5 text-theme-primary"
                     >
                       <option value="DRAFT">DRAFT</option>
                       <option value="PUBLISHED">PUBLISHED</option>
@@ -173,17 +173,17 @@ const AdminTests = () => {
                     <div className="flex items-center justify-end gap-2">
                       <button
                         onClick={() => handleOpenModal(t)}
-                        className="p-1.5 rounded-lg text-slate-300 hover:bg-slate-800"
+                        className="p-2 rounded-lg text-theme-secondary hover:bg-theme-input"
                         title="Edit Test"
                       >
-                        <Edit2 size={15} />
+                        <Edit2 size={16} />
                       </button>
                       <button
                         onClick={() => handleDelete(t.id)}
-                        className="p-1.5 rounded-lg text-rose-400 hover:bg-rose-500/10"
+                        className="p-2 rounded-lg text-rose-500 hover:bg-rose-500/10"
                         title="Delete Test"
                       >
-                        <Trash2 size={15} />
+                        <Trash2 size={16} />
                       </button>
                     </div>
                   </td>
@@ -197,13 +197,13 @@ const AdminTests = () => {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="glass-card p-6 max-w-lg w-full border border-slate-700 shadow-2xl animate-fade-in space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-base font-bold text-slate-100">
+          <div className="glass-card p-6 max-w-lg w-full border border-theme shadow-2xl animate-fade-in space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-theme pb-3">
+              <h3 className="text-lg font-bold text-theme-primary">
                 {editTest ? 'Edit Mock Test' : 'Create New Mock Test'}
               </h3>
-              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-200">
-                <X size={18} />
+              <button onClick={() => setShowModal(false)} className="text-theme-muted hover:text-theme-primary">
+                <X size={20} />
               </button>
             </div>
 
@@ -216,7 +216,7 @@ const AdminTests = () => {
                   className="form-select"
                 >
                   {subjects.map((sub) => (
-                    <option key={sub.id} value={sub.id} className="bg-slate-900">
+                    <option key={sub.id} value={sub.id} className="bg-theme-primary text-theme-primary">
                       {sub.name}
                     </option>
                   ))}
@@ -311,11 +311,11 @@ const AdminTests = () => {
               </div>
 
               <div className="flex items-center justify-end gap-2 pt-2">
-                <button type="button" onClick={() => setShowModal(false)} className="btn btn-secondary text-xs">
+                <button type="button" onClick={() => setShowModal(false)} className="btn btn-secondary text-sm">
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary text-xs">
-                  <Save size={14} /> {editTest ? 'Save Changes' : 'Create Test'}
+                <button type="submit" className="btn btn-primary text-sm">
+                  <Save size={16} /> {editTest ? 'Save Changes' : 'Create Test'}
                 </button>
               </div>
             </form>

@@ -75,59 +75,59 @@ const AdminSubjects = () => {
 
   if (loading) {
     return (
-      <div className="p-8 flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
+      <div className="p-12 flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-14 w-14 border-b-4 border-indigo-600"></div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-700/60 pb-4">
+    <div className="space-y-8 animate-fade-in">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-theme pb-5">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-100 flex items-center gap-2.5">
-            <BookOpen className="text-indigo-400" /> Subject Management
+          <h1 className="text-2xl font-extrabold text-theme-primary flex items-center gap-3">
+            <BookOpen className="text-indigo-500" size={28} /> Subject Management
           </h1>
-          <p className="text-xs text-slate-400 mt-1">Create, edit, or remove programming subjects in the platform catalog</p>
+          <p className="text-sm font-semibold text-theme-secondary mt-1">Create, edit, or remove programming subjects in the platform catalog</p>
         </div>
 
         <button
           onClick={() => handleOpenModal()}
-          className="btn btn-primary text-xs py-2.5 px-4 flex items-center gap-2 shadow-lg shadow-indigo-500/25"
+          className="btn btn-primary text-sm py-2.5 px-4 flex items-center gap-2 shadow-lg shadow-indigo-500/25"
         >
-          <Plus size={16} /> Create New Subject
+          <Plus size={18} /> Create New Subject
         </button>
       </div>
 
       {/* Subjects Grid */}
       <div className="cards-grid">
         {subjects.map((s) => (
-          <div key={s.id} className="glass-card p-5 flex flex-col justify-between space-y-4 border-slate-800">
-            <div className="space-y-2">
+          <div key={s.id} className="glass-card p-6 flex flex-col justify-between space-y-5 border-theme hover:border-indigo-500/50 transition-all">
+            <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="font-mono text-xs font-bold text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20">
+                <span className="font-mono text-xs font-bold text-indigo-500 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/30">
                   {s.code}
                 </span>
-                <span className="text-[11px] text-slate-400">{s.totalTests || 0} Tests</span>
+                <span className="text-xs font-bold text-theme-muted">{s.totalTests || 0} Tests</span>
               </div>
 
-              <h3 className="text-base font-bold text-slate-100">{s.name}</h3>
-              <p className="text-xs text-slate-400 line-clamp-3 leading-relaxed">{s.description}</p>
+              <h3 className="text-lg font-bold text-theme-primary">{s.name}</h3>
+              <p className="text-sm font-semibold text-theme-secondary line-clamp-3 leading-relaxed">{s.description}</p>
             </div>
 
-            <div className="flex items-center gap-2 pt-2 border-t border-slate-800">
+            <div className="flex items-center gap-2 pt-3 border-t border-theme">
               <button
                 onClick={() => handleOpenModal(s)}
-                className="flex-1 btn btn-secondary text-xs py-2 flex items-center justify-center gap-1.5 border-slate-700"
+                className="flex-1 btn btn-secondary text-sm py-2 flex items-center justify-center gap-2"
               >
-                <Edit2 size={14} /> Edit
+                <Edit2 size={16} /> Edit
               </button>
               <button
                 onClick={() => handleDelete(s.id)}
-                className="p-2 rounded-xl text-rose-400 hover:bg-rose-500/10 border border-slate-800 transition-colors"
+                className="p-2.5 rounded-xl text-rose-500 hover:bg-rose-500/10 border border-theme transition-colors"
                 title="Delete Subject"
               >
-                <Trash2 size={14} />
+                <Trash2 size={16} />
               </button>
             </div>
           </div>
@@ -137,13 +137,13 @@ const AdminSubjects = () => {
       {/* Create / Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="glass-card p-6 max-w-md w-full border border-slate-700 shadow-2xl animate-fade-in space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-base font-bold text-slate-100">
+          <div className="glass-card p-6 max-w-md w-full border border-theme shadow-2xl animate-fade-in space-y-4">
+            <div className="flex items-center justify-between border-b border-theme pb-3">
+              <h3 className="text-lg font-bold text-theme-primary">
                 {editSubject ? 'Edit Subject' : 'Create New Subject'}
               </h3>
-              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-200">
-                <X size={18} />
+              <button onClick={() => setShowModal(false)} className="text-theme-muted hover:text-theme-primary">
+                <X size={20} />
               </button>
             </div>
 
@@ -195,11 +195,11 @@ const AdminSubjects = () => {
               </div>
 
               <div className="flex items-center justify-end gap-2 pt-2">
-                <button type="button" onClick={() => setShowModal(false)} className="btn btn-secondary text-xs">
+                <button type="button" onClick={() => setShowModal(false)} className="btn btn-secondary text-sm">
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary text-xs">
-                  <Save size={14} /> {editSubject ? 'Save Changes' : 'Create Subject'}
+                <button type="submit" className="btn btn-primary text-sm">
+                  <Save size={16} /> {editSubject ? 'Save Changes' : 'Create Subject'}
                 </button>
               </div>
             </form>
