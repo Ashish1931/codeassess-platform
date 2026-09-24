@@ -148,3 +148,38 @@ CREATE TABLE IF NOT EXISTS certificates (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
 );
+
+-- 13. Subscriptions Table
+CREATE TABLE IF NOT EXISTS subscriptions (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    plan VARCHAR(20) NOT NULL,
+    billing_cycle VARCHAR(20) NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    amount_in_paise BIGINT NOT NULL,
+    start_date DATETIME NOT NULL,
+    end_date DATETIME,
+    auto_renew BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- 14. Payment Transactions Table
+CREATE TABLE IF NOT EXISTS payment_transactions (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    subscription_id BIGINT,
+    plan VARCHAR(20) NOT NULL,
+    billing_cycle VARCHAR(20) NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    amount_in_paise BIGINT NOT NULL,
+    currency VARCHAR(10) NOT NULL,
+    gateway_order_id VARCHAR(100) NOT NULL UNIQUE,
+    gateway_payment_id VARCHAR(100),
+    failure_reason TEXT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (subscription_id) REFERENCES subscriptions(id) ON DELETE SET NULL
+);

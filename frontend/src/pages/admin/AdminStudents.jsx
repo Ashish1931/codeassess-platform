@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { adminService } from '../../services/api';
-import { Users, Search, Mail, Phone, BookOpen, ShieldCheck } from 'lucide-react';
+import { Users, Search } from 'lucide-react';
 
 const AdminStudents = () => {
   const [students, setStudents] = useState([]);

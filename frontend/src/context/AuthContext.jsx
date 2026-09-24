@@ -6,7 +6,12 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem('user');
-    return savedUser ? JSON.parse(savedUser) : null;
+    try {
+      return savedUser ? JSON.parse(savedUser) : null;
+    } catch {
+      localStorage.removeItem('user');
+      return null;
+    }
   });
   const [token, setToken] = useState(() => localStorage.getItem('token') || null);
   const [loading, setLoading] = useState(false);
@@ -21,7 +26,14 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       const res = await userService.getProfile();
-      const updatedUser = { ...user, ...res.data };
+      const savedUser = localStorage.getItem('user');
+      let currentUser = {};
+      try {
+        currentUser = savedUser ? JSON.parse(savedUser) : {};
+      } catch {
+        localStorage.removeItem('user');
+      }
+      const updatedUser = { ...currentUser, ...res.data };
       setUser(updatedUser);
       localStorage.setItem('user', JSON.stringify(updatedUser));
     } catch (err) {
@@ -39,6 +51,13 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('token', jwtData.token);
     localStorage.setItem('user', JSON.stringify(jwtData));
     return jwtData;
+  };
+
+  const updateUser = (nextUser) => {
+    setUser(nextUser);
+    if (nextUser) {
+      localStorage.setItem('user', JSON.stringify(nextUser));
+    }
   };
 
   const googleLogin = async (googleData) => {
@@ -63,11 +82,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   const isAdmin = () => {
-    return user && user.roles && user.roles.includes('ROLE_ADMIN');
+    return Boolean(user && user.roles && user.roles.includes('ROLE_ADMIN'));
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, googleLogin, register, logout, isAdmin, setUser }}>
+    <AuthContext.Provider value={{ user, token, loading, login, googleLogin, register, logout, isAdmin, setUser: updateUser, refreshUserProfile: fetchUserProfile }}>
       {children}
     </AuthContext.Provider>
   );

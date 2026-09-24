@@ -11,6 +11,7 @@ import com.codeassess.exception.ResourceNotFoundException;
 import com.codeassess.repository.RoleRepository;
 import com.codeassess.repository.UserRepository;
 import com.codeassess.service.AuthService;
+import com.codeassess.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +37,7 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider tokenProvider;
+    private final SubscriptionService subscriptionService;
 
     @Override
     public JwtResponse login(LoginRequest loginRequest) {
@@ -64,6 +67,7 @@ public class AuthServiceImpl implements AuthService {
                 .lastName(user.getLastName())
                 .profilePictureUrl(user.getProfilePictureUrl())
                 .roles(roles)
+                .subscription(subscriptionService.getCurrentSubscription(user.getId()))
                 .build();
     }
 
@@ -152,7 +156,7 @@ public class AuthServiceImpl implements AuthService {
                     .firstName(request.getFirstName() != null ? request.getFirstName() : "Google")
                     .lastName(request.getLastName() != null ? request.getLastName() : "User")
                     .email(request.getEmail())
-                    .mobileNumber("0000000000")
+                    .mobileNumber(generateOAuthMobileNumber())
                     .password(passwordEncoder.encode(UUID.randomUUID().toString()))
                     .roles(roles)
                     .isOAuth2User(true)
@@ -174,7 +178,16 @@ public class AuthServiceImpl implements AuthService {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .profilePictureUrl(user.getProfilePictureUrl())
-                .roles(List.of("ROLE_STUDENT"))
+                .roles(principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
+                .subscription(subscriptionService.getCurrentSubscription(user.getId()))
                 .build();
+    }
+
+    private String generateOAuthMobileNumber() {
+        String mobileNumber;
+        do {
+            mobileNumber = "9" + String.format("%09d", ThreadLocalRandom.current().nextInt(0, 1_000_000_000));
+        } while (userRepository.existsByMobileNumber(mobileNumber));
+        return mobileNumber;
     }
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import { CheckCircle2, Bookmark, HelpCircle } from 'lucide-react';
 
 const QuestionPalette = ({ questions, answers, currentIndex, onSelectQuestion }) => {
   return (

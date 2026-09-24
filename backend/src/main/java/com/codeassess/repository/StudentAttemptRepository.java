@@ -15,6 +15,7 @@ public interface StudentAttemptRepository extends JpaRepository<StudentAttempt, 
     List<StudentAttempt> findByStudentIdAndTestId(Long studentId, Long testId);
     Optional<StudentAttempt> findByStudentIdAndTestIdAndIsSubmittedFalse(Long studentId, Long testId);
     Long countByStudentIdAndIsSubmittedTrue(Long studentId);
+    Long countByStudentIdAndStartTimeBetween(Long studentId, LocalDateTime startTime, LocalDateTime endTime);
 
     @Query("SELECT COUNT(sa) FROM StudentAttempt sa WHERE sa.startTime >= :startOfDay")
     Long countAttemptsToday(@Param("startOfDay") LocalDateTime startOfDay);

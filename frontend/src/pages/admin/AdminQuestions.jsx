@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { questionService, testService } from '../../services/api';
-import { HelpCircle, Plus, Edit2, Trash2, X, Save, Code } from 'lucide-react';
+import { HelpCircle, Plus, Edit2, Trash2, X, Save } from 'lucide-react';
 
 const AdminQuestions = () => {
   const [tests, setTests] = useState([]);

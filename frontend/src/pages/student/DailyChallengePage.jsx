@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Flame, Award, CheckCircle, Zap, ArrowRight } from 'lucide-react';
+import { Flame, CheckCircle, Zap } from 'lucide-react';
 
 const DailyChallengePage = () => {
   const [selectedOption, setSelectedOption] = useState(null);

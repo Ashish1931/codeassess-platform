@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { 
   LayoutDashboard, User, BookOpen, FileCheck, BarChart3, Download, 
-  LogOut, Bookmark, Zap, Trophy, ShieldCheck, Users, HelpCircle, Flame
+  LogOut, Bookmark, Zap, Trophy, ShieldCheck, Users, HelpCircle, Flame, CreditCard
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, onClose }) => {
@@ -20,6 +20,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     { to: '/student/wrong-answers', label: 'Practice Mistakes', icon: Zap },
     { to: '/student/leaderboard', label: 'Leaderboard', icon: Trophy },
     { to: '/student/daily-challenge', label: 'Daily Challenge', icon: Flame },
+    { to: '/student/subscription', label: 'Subscription', icon: CreditCard },
   ];
 
   const adminLinks = [

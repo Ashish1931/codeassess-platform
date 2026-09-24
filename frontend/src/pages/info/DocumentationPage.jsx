@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Code2, Cpu, CheckCircle2, ArrowLeft } from 'lucide-react';
+import { BookOpen, Cpu, CheckCircle2, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const DocumentationPage = () => {

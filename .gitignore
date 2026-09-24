@@ -1,0 +1,26 @@
+# Build outputs
+target/
+backend/target/
+frontend/dist/
+frontend/node_modules/
+node_modules/
+dist/
+
+# IDE & Editor files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+backend/.metadata/
+backend/MCQ/
+
+# OS & Environment files
+.DS_Store
+Thumbs.db
+*.log
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

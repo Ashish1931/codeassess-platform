@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { leaderboardService } from '../../services/api';
-import { Trophy, Medal, Award, Flame, User } from 'lucide-react';
+import { Trophy } from 'lucide-react';
 
 const LeaderboardPage = () => {
   const [leaderboard, setLeaderboard] = useState([]);

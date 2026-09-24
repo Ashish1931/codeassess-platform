@@ -12,9 +12,9 @@
       }
     },
     "datasource": {
-      "url": "${SPRING_DATASOURCE_URL:jdbc:h2:mem:codeassess_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL}",
-      "username": "${SPRING_DATASOURCE_USERNAME:sa}",
-      "password": "${SPRING_DATASOURCE_PASSWORD:}",
+      "url": "${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/codeassess_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}",
+      "username": "${SPRING_DATASOURCE_USERNAME:root}",
+      "password": "${SPRING_DATASOURCE_PASSWORD:root}",
       "hikari": {
         "connection-timeout": 15000,
         "maximum-pool-size": 10,
@@ -28,6 +28,7 @@
       "show-sql": false,
       "properties": {
         "hibernate": {
+          "dialect": "org.hibernate.dialect.MySQLDialect",
           "format_sql": true
         }
       }

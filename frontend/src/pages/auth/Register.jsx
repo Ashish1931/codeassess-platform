@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Code2, User, Mail, Phone, Lock, BookOpen, AlertCircle, CheckCircle, Eye, EyeOff, Sparkles, ArrowRight } from 'lucide-react';
+import { Code2, User, Mail, Phone, Lock, BookOpen, AlertCircle, CheckCircle, Eye, EyeOff, ArrowRight } from 'lucide-react';
 
 const Register = () => {
   const { register } = useAuth();
@@ -343,4 +343,3 @@ const Register = () => {
 };
 
 export default Register;
-

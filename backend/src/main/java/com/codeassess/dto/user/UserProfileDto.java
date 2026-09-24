@@ -1,5 +1,6 @@
 package com.codeassess.dto.user;
 
+import com.codeassess.dto.subscription.SubscriptionDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,5 +19,6 @@ public class UserProfileDto {
     private String mobileNumber;
     private String subjectPreference;
     private String profilePictureUrl;
+    private SubscriptionDto subscription;
     private LocalDateTime createdAt;
 }

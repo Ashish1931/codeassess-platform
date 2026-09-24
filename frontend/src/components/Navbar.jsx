@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { 
-  Code2, Sun, Moon, LogOut, User, ShieldCheck, Bell, 
+import {
+  Code2, Sun, Moon, LogOut, User, ShieldCheck, Bell,
   Search, Menu
 } from 'lucide-react';
 
@@ -13,6 +13,7 @@ const Navbar = ({ onToggleSidebar }) => {
   const navigate = useNavigate();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const subscriptionPlan = user?.subscription?.planName || user?.subscription?.plan || 'Free';
 
   const handleLogout = () => {
     logout();
@@ -113,7 +114,7 @@ const Navbar = ({ onToggleSidebar }) => {
                 <div className="hidden sm:flex flex-col text-left">
                   <span className="text-sm font-bold text-theme-primary">{user.firstName} {user.lastName}</span>
                   <span className="text-xs text-indigo-500 font-bold">
-                    {isAdmin() ? 'Administrator' : 'Student'}
+                    {isAdmin() ? 'Administrator' : `${subscriptionPlan} Student`}
                   </span>
                 </div>
               </button>
@@ -123,6 +124,9 @@ const Navbar = ({ onToggleSidebar }) => {
                   <div className="px-4 py-2 border-b border-theme mb-1">
                     <p className="text-sm font-bold text-theme-primary">{user.firstName} {user.lastName}</p>
                     <p className="text-xs text-theme-muted truncate">{user.email}</p>
+                    {!isAdmin() && (
+                      <p className="text-xs text-emerald-500 font-bold mt-1">{subscriptionPlan} Plan</p>
+                    )}
                   </div>
                   <Link 
                     to={isAdmin() ? '/admin/dashboard' : '/student/profile'}
@@ -131,6 +135,15 @@ const Navbar = ({ onToggleSidebar }) => {
                   >
                     <User size={18} /> My Profile
                   </Link>
+                  {!isAdmin() && (
+                    <Link
+                      to="/student/subscription"
+                      onClick={() => setShowProfileMenu(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-theme-secondary hover:bg-indigo-500/10 hover:text-indigo-500 transition-colors"
+                    >
+                      <ShieldCheck size={18} /> Subscription
+                    </Link>
+                  )}
                   {isAdmin() && (
                     <Link 
                       to="/admin/dashboard"

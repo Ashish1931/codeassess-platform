@@ -9,6 +9,7 @@ import com.codeassess.exception.ResourceNotFoundException;
 import com.codeassess.repository.*;
 import com.codeassess.service.ExamService;
 import com.codeassess.service.QuestionService;
+import com.codeassess.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ public class ExamServiceImpl implements ExamService {
     private final ResultRepository resultRepository;
     private final QuestionRepository questionRepository;
     private final QuestionService questionService;
+    private final SubscriptionService subscriptionService;
 
     @Override
     @Transactional
@@ -41,6 +43,8 @@ public class ExamServiceImpl implements ExamService {
 
         User student = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+
+        enforceSubscriptionLimit(userId);
 
         // Create new attempt
         StudentAttempt attempt = StudentAttempt.builder()
@@ -72,6 +76,8 @@ public class ExamServiceImpl implements ExamService {
     public ExamResultResponse submitExam(Long userId, ExamSubmissionRequest request) {
         StudentAttempt attempt = attemptRepository.findById(request.getAttemptId())
                 .orElseThrow(() -> new ResourceNotFoundException("StudentAttempt", "id", request.getAttemptId()));
+
+        ensureAttemptOwner(attempt, userId);
 
         if (Boolean.TRUE.equals(attempt.getIsSubmitted())) {
             return getExamResultByAttemptId(attempt.getId(), userId);
@@ -167,6 +173,8 @@ public class ExamServiceImpl implements ExamService {
         StudentAttempt attempt = attemptRepository.findById(attemptId)
                 .orElseThrow(() -> new ResourceNotFoundException("Attempt", "id", attemptId));
 
+        ensureAttemptOwner(attempt, userId);
+
         Result result = resultRepository.findByAttemptId(attemptId)
                 .orElseThrow(() -> new ResourceNotFoundException("Result", "attemptId", attemptId));
 
@@ -229,5 +237,26 @@ public class ExamServiceImpl implements ExamService {
                 .topicBreakdown(topicBreakdown)
                 .questionReviews(questionReviews)
                 .build();
+    }
+
+    private void enforceSubscriptionLimit(Long userId) {
+        Integer monthlyLimit = subscriptionService.getCurrentSubscription(userId).getMonthlyTestLimit();
+        if (monthlyLimit == null || monthlyLimit < 0) {
+            return;
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfMonth = now.withDayOfMonth(1).toLocalDate().atStartOfDay();
+        Long monthlyAttempts = attemptRepository.countByStudentIdAndStartTimeBetween(userId, startOfMonth, now);
+
+        if (monthlyAttempts >= monthlyLimit) {
+            throw new BadRequestException("Monthly test attempt limit reached. Please upgrade your subscription plan.");
+        }
+    }
+
+    private void ensureAttemptOwner(StudentAttempt attempt, Long userId) {
+        if (!attempt.getStudent().getId().equals(userId)) {
+            throw new BadRequestException("You are not allowed to access this exam attempt.");
+        }
     }
 }

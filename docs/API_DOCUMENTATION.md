@@ -48,3 +48,13 @@ Base URL: `/api/v1`
 | `POST` | `/exams/start/{testId}` | Student | Initiates an exam attempt & starts timer. |
 | `POST` | `/exams/submit` | Student | Submits exam answers, triggers grading algorithm. |
 | `GET` | `/exams/result/{attemptId}` | Student/Admin | Retrieves attempt result & solution breakdown. |
+
+## 6. Subscription & Payment Endpoints (`/api/v1/subscriptions`)
+
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/subscriptions/plans` | Student/Admin | Lists Free, Pro, and Premium plan metadata. |
+| `GET` | `/subscriptions/current` | Student/Admin | Returns the authenticated user's active plan. |
+| `POST` | `/subscriptions/checkout` | Student | Creates a local demo payment order or activates Free immediately. |
+| `POST` | `/subscriptions/confirm` | Student | Confirms a demo payment order and activates the selected paid plan. |
+| `POST` | `/subscriptions/cancel` | Student | Cancels the active paid plan and moves the user to Free. |

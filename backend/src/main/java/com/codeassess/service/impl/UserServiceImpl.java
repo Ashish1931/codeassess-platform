@@ -12,6 +12,7 @@ import com.codeassess.repository.ResultRepository;
 import com.codeassess.repository.StudentAttemptRepository;
 import com.codeassess.repository.TestRepository;
 import com.codeassess.repository.UserRepository;
+import com.codeassess.service.SubscriptionService;
 import com.codeassess.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,6 +32,7 @@ public class UserServiceImpl implements UserService {
     private final StudentAttemptRepository attemptRepository;
     private final ResultRepository resultRepository;
     private final PasswordEncoder passwordEncoder;
+    private final SubscriptionService subscriptionService;
 
     @Override
     public UserProfileDto getUserProfile(Long userId) {
@@ -45,6 +47,7 @@ public class UserServiceImpl implements UserService {
                 .mobileNumber(user.getMobileNumber())
                 .subjectPreference(user.getSubjectPreference())
                 .profilePictureUrl(user.getProfilePictureUrl())
+                .subscription(subscriptionService.getCurrentSubscription(user.getId()))
                 .createdAt(user.getCreatedAt())
                 .build();
     }
@@ -55,9 +58,14 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setMobileNumber(request.getMobileNumber());
+        String mobileNumber = request.getMobileNumber();
+        if (!user.getMobileNumber().equals(mobileNumber) && userRepository.existsByMobileNumber(mobileNumber)) {
+            throw new BadRequestException("Mobile Number is already registered");
+        }
+
+        user.setFirstName(request.getFirstName().trim());
+        user.setLastName(request.getLastName().trim());
+        user.setMobileNumber(mobileNumber.trim());
         user.setSubjectPreference(request.getSubjectPreference());
         if (request.getProfilePictureUrl() != null) {
             user.setProfilePictureUrl(request.getProfilePictureUrl());

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
+import com.codeassess.dto.subscription.SubscriptionDto;
 
 @Data
 @Builder
@@ -20,4 +21,5 @@ public class JwtResponse {
     private String lastName;
     private String profilePictureUrl;
     private List<String> roles;
+    private SubscriptionDto subscription;
 }

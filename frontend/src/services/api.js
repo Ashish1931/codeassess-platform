@@ -105,4 +105,12 @@ export const adminService = {
   getAllStudents: () => api.get('/admin/students'),
 };
 
+export const subscriptionService = {
+  getPlans: () => api.get('/subscriptions/plans'),
+  getCurrentSubscription: () => api.get('/subscriptions/current'),
+  createCheckout: (data) => api.post('/subscriptions/checkout', data),
+  confirmPayment: (data) => api.post('/subscriptions/confirm', data),
+  cancelSubscription: () => api.post('/subscriptions/cancel'),
+};
+
 export default api;

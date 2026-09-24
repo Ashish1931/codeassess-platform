@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { examService } from '../services/api';
 
 const ExamContext = createContext();
@@ -6,41 +7,77 @@ const ExamContext = createContext();
 export const ExamProvider = ({ children }) => {
   const [activeExam, setActiveExam] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState({}); // { questionId: { selectedAnswer, isMarkedForReview } }
+  const [answers, setAnswers] = useState({});
   const [secondsRemaining, setSecondsRemaining] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // Refs to avoid stale closures in timer
+  const answersRef = useRef(answers);
+  const activeExamRef = useRef(activeExam);
+  const secondsRef = useRef(secondsRemaining);
+  const isSubmittingRef = useRef(isSubmitting);
+  const navigate = useNavigate();
 
-  // Countdown timer effect
+  useEffect(() => { answersRef.current = answers; }, [answers]);
+  useEffect(() => { activeExamRef.current = activeExam; }, [activeExam]);
+  useEffect(() => { secondsRef.current = secondsRemaining; }, [secondsRemaining]);
+  useEffect(() => { isSubmittingRef.current = isSubmitting; }, [isSubmitting]);
+
+  // Countdown timer — runs once when exam starts
   useEffect(() => {
-    if (!activeExam || secondsRemaining <= 0) return;
-
+    if (!activeExam) return;
     const timer = setInterval(() => {
       setSecondsRemaining((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          autoSubmit();
+          // Auto-submit using refs to avoid stale closure
+          handleAutoSubmit();
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
-
     return () => clearInterval(timer);
-  }, [activeExam, secondsRemaining]);
+  }, [activeExam?.attemptId]); // only restart when a new exam begins
 
   // Anti-cheat refresh warning listener
   useEffect(() => {
     const handleBeforeUnload = (e) => {
-      if (activeExam) {
+      if (activeExamRef.current) {
         e.preventDefault();
         e.returnValue = 'Warning: Leaving or refreshing the page will auto-submit your test!';
         return e.returnValue;
       }
     };
-
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, [activeExam]);
+  }, []);
+
+  const handleAutoSubmit = async () => {
+    const exam = activeExamRef.current;
+    if (!exam || isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
+    setIsSubmitting(true);
+    try {
+      const formattedAnswers = Object.entries(answersRef.current).map(([qId, val]) => ({
+        questionId: parseInt(qId),
+        selectedAnswer: val.selectedAnswer || null,
+        isMarkedForReview: val.isMarkedForReview || false,
+      }));
+      const totalDurationSec = exam.durationMinutes * 60;
+      const payload = {
+        attemptId: exam.attemptId,
+        timeTakenSeconds: totalDurationSec,
+        answers: formattedAnswers,
+      };
+      const res = await examService.submitExam(payload);
+      setActiveExam(null);
+      navigate(`/student/result/${res.data.attemptId}`);
+    } catch (err) {
+      console.error('Auto-submit failed', err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const startExam = async (testId) => {
     const res = await examService.startExam(testId);
@@ -100,9 +137,7 @@ export const ExamProvider = ({ children }) => {
     }
   };
 
-  const autoSubmit = () => {
-    submitExam();
-  };
+  const autoSubmit = () => handleAutoSubmit();
 
   return (
     <ExamContext.Provider

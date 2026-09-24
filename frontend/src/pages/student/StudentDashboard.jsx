@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { userService } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 import { 
   FileCheck, CheckCircle2, Clock, Award, TrendingUp, AlertTriangle, 
-  Target, BarChart2, BookOpen, Flame
+  Target, BarChart2, BookOpen, Flame, Crown
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
 const StudentDashboard = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
     fetchDashboardStats();
@@ -49,7 +51,7 @@ const StudentDashboard = () => {
   return (
     <div className="space-y-8 animate-fade-in pb-10">
       {/* Welcome Banner */}
-      <div className="glass-card p-6 sm:p-8 md:p-10 relative overflow-hidden bg-gradient-to-r from-indigo-900/40 via-purple-900/30 to-slate-900/40 border border-indigo-500/40 shadow-xl">
+      <div className="page-band p-6 sm:p-8 md:p-10 relative overflow-hidden">
         <div className="relative z-10 space-y-4">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/20 text-indigo-500 text-sm font-bold border border-indigo-500/40 backdrop-blur-md">
             <Flame size={18} className="text-amber-400 animate-pulse" /> 5 Day Active Streak!
@@ -66,6 +68,12 @@ const StudentDashboard = () => {
             </Link>
             <Link to="/student/daily-challenge" className="btn btn-secondary text-base py-3 px-6">
               <Flame size={20} className="text-amber-500" /> Daily Challenge
+            </Link>
+            <Link to="/student/subscription" className={`btn btn-outline text-base py-3 px-6 border ${
+              user?.subscription?.plan === 'PREMIUM' ? 'border-amber-500 text-amber-500 hover:bg-amber-500/10' :
+              user?.subscription?.plan === 'PRO'     ? 'border-indigo-500 text-indigo-500' : ''
+            }`}>
+              <Crown size={20} /> {user?.subscription?.planName || 'Free'} Plan
             </Link>
           </div>
         </div>
@@ -103,10 +111,10 @@ const StudentDashboard = () => {
             {stats?.scoreTrendOverTime && stats.scoreTrendOverTime.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={stats.scoreTrendOverTime}>
-                  <XAxis dataKey="date" stroke="#64748b" fontSize={13} fontWeight={600} />
-                  <YAxis domain={[0, 100]} stroke="#64748b" fontSize={13} fontWeight={600} />
+                  <XAxis dataKey="date" stroke="var(--text-muted)" fontSize={13} fontWeight={600} />
+                  <YAxis domain={[0, 100]} stroke="var(--text-muted)" fontSize={13} fontWeight={600} />
                   <Tooltip 
-                    contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '14px', color: '#fff' }}
+                    contentStyle={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border-color)', borderRadius: '12px', fontSize: '13px', color: 'var(--text-primary)' }}
                   />
                   <Line type="monotone" dataKey="scorePercentage" stroke="#6366f1" strokeWidth={3.5} dot={{ fill: '#8b5cf6', r: 6 }} />
                 </LineChart>
@@ -132,10 +140,10 @@ const StudentDashboard = () => {
             {stats?.subjectPerformance && stats.subjectPerformance.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={stats.subjectPerformance}>
-                  <XAxis dataKey="subjectName" stroke="#64748b" fontSize={13} fontWeight={600} />
-                  <YAxis domain={[0, 100]} stroke="#64748b" fontSize={13} fontWeight={600} />
+                  <XAxis dataKey="subjectName" stroke="var(--text-muted)" fontSize={13} fontWeight={600} />
+                  <YAxis domain={[0, 100]} stroke="var(--text-muted)" fontSize={13} fontWeight={600} />
                   <Tooltip 
-                    contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '14px', color: '#fff' }}
+                    contentStyle={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border-color)', borderRadius: '12px', fontSize: '13px', color: 'var(--text-primary)' }}
                   />
                   <Bar dataKey="accuracyPercentage" fill="#8b5cf6" radius={[8, 8, 0, 0]} />
                 </BarChart>

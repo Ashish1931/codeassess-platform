@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { questionService } from '../../services/api';
-import { Bookmark, Code, CheckCircle, Trash2, HelpCircle } from 'lucide-react';
+import { Bookmark, Trash2 } from 'lucide-react';
 
 const BookmarksPage = () => {
   const [bookmarks, setBookmarks] = useState([]);

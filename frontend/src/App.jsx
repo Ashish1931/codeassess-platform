@@ -25,6 +25,7 @@ import DownloadReports from './pages/student/DownloadReports';
 import BookmarksPage from './pages/student/BookmarksPage';
 import LeaderboardPage from './pages/student/LeaderboardPage';
 import DailyChallengePage from './pages/student/DailyChallengePage';
+import SubscriptionPage from './pages/student/SubscriptionPage';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -48,7 +49,16 @@ const AppLayout = () => {
   const isExamPage = location.pathname.startsWith('/student/exam/');
   const isAuthPage = ['/login', '/register', '/forgot-password'].includes(location.pathname);
 
-  if (isExamPage || isAuthPage || !user) {
+  if (isExamPage) {
+    return (
+      <Routes>
+        <Route path="/student/exam/:testId" element={<ProtectedRoute><ExamPage /></ProtectedRoute>} />
+        <Route path="*" element={<Navigate to="/student/dashboard" replace />} />
+      </Routes>
+    );
+  }
+
+  if (isAuthPage || !user) {
     return (
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -58,7 +68,6 @@ const AppLayout = () => {
         <Route path="/terms" element={<TermsOfService />} />
         <Route path="/support" element={<SupportPage />} />
         <Route path="/documentation" element={<DocumentationPage />} />
-        <Route path="/student/exam/:testId" element={<ProtectedRoute><ExamPage /></ProtectedRoute>} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     );
@@ -87,6 +96,7 @@ const AppLayout = () => {
               <Route path="/student/wrong-answers" element={<BookmarksPage />} />
               <Route path="/student/leaderboard" element={<LeaderboardPage />} />
               <Route path="/student/daily-challenge" element={<DailyChallengePage />} />
+              <Route path="/student/subscription" element={<SubscriptionPage />} />
             </Route>
 
             {/* Static Info Routes */}

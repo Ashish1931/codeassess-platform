@@ -26,6 +26,7 @@
 - **Visual Performance Analytics**: Interactive line charts for score trends, bar charts for subject accuracy, pie charts for correct/wrong ratios, and weak topic identification.
 - **PDF Report & Certificate Generation**: Client-side and server-side PDF export of official transcripts and certificates using HTML2Canvas & jsPDF.
 - **Gamification & Practice**: Global leaderboards, daily challenge streaks (+50 XP), question bookmarking, and wrong answers practice mode.
+- **Subscriptions & Payments**: Free, Pro, and Premium plans with a local demo payment gateway flow and monthly attempt limits.
 
 ### For Administrators
 - **Complete Content Management (CRUD)**: Create, update, and manage Students, Subjects, Mock Test Papers, and MCQ Question Banks.
@@ -45,7 +46,7 @@
 ### Backend (`/backend`)
 - **Core**: Java 17/21, Spring Boot 3.2.3, Maven
 - **Security**: Spring Security 6, JWT Stateless Token Provider, BCrypt Password Encoder, Google OAuth2 support
-- **Persistence**: Spring Data JPA, Hibernate ORM, MySQL (Production) & H2 (Zero-config local mode)
+- **Persistence**: Spring Data JPA, Hibernate ORM, MySQL
 - **Architecture**: Layered Architecture (Controller -> Service -> Repository -> Entity) with DTO Pattern & Builder Pattern
 
 ---
@@ -102,11 +103,14 @@ All system design diagrams are formatted in GitHub Flavored Markdown (Mermaid):
 ## Quick Start (Local Setup)
 
 ```bash
-# 1. Start Spring Boot Backend
+# 1. Create or confirm MySQL database
+mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS codeassess_db;"
+
+# 2. Start Spring Boot Backend
 cd backend
 mvn spring-boot:run
 
-# 2. Start React Frontend
+# 3. Start React Frontend
 cd frontend
 npm install
 npm run dev
@@ -116,3 +120,5 @@ Open `http://localhost:5173` in your browser.
 
 - **Student Login**: `student@codeassess.com` / `Student@1234`
 - **Admin Login**: `admin@codeassess.com` / `Admin@1234`
+
+Local paid-plan checkout is available under the student **Subscription** page and uses the built-in demo gateway confirmation flow.

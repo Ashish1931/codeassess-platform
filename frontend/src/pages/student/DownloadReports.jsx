@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { Download, FileText, Award, CheckCircle, Code2, Printer } from 'lucide-react';
+import { Download, Award, Code2, Printer } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 

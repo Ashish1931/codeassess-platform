@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { userService } from '../../services/api';
-import { User, Mail, Phone, Lock, Save, Camera, CheckCircle, AlertCircle } from 'lucide-react';
+import { User, Lock, Save, Camera, CheckCircle, AlertCircle, CreditCard, Crown } from 'lucide-react';
 
 const MyProfile = () => {
   const { user, setUser } = useAuth();
@@ -25,6 +26,7 @@ const MyProfile = () => {
   const [passwordMsg, setPasswordMsg] = useState({ type: '', text: '' });
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [loadingPass, setLoadingPass] = useState(false);
+  const subscription = user?.subscription;
 
   useEffect(() => {
     if (user) {
@@ -47,6 +49,7 @@ const MyProfile = () => {
     try {
       const res = await userService.updateProfile(profileData);
       setUser({ ...user, ...res.data });
+      localStorage.setItem('user', JSON.stringify({ ...user, ...res.data }));
       setProfileMsg({ type: 'success', text: 'Profile updated successfully!' });
     } catch (err) {
       setProfileMsg({ type: 'error', text: err.response?.data?.message || 'Failed to update profile.' });
@@ -80,7 +83,8 @@ const MyProfile = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
       {/* Header Banner */}
-      <div className="glass-card p-6 md:p-8 flex flex-col sm:flex-row items-center gap-6 border-indigo-500/30">
+      <div className="page-band p-6 md:p-8 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <div className="flex flex-col sm:flex-row items-center gap-6">
         <div className="relative">
           <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-extrabold text-3xl text-white shadow-xl shadow-indigo-500/30">
             {profileData.firstName ? profileData.firstName.charAt(0).toUpperCase() : 'U'}
@@ -91,19 +95,41 @@ const MyProfile = () => {
         </div>
 
         <div className="text-center sm:text-left space-y-1">
-          <h2 className="text-2xl font-extrabold text-slate-100">{profileData.firstName} {profileData.lastName}</h2>
-          <p className="text-xs text-indigo-400 font-medium">{profileData.email}</p>
-          <span className="inline-block text-[10px] px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-semibold border border-indigo-500/30 mt-1">
+          <h2 className="text-2xl font-extrabold text-theme-primary">{profileData.firstName} {profileData.lastName}</h2>
+          <p className="text-xs text-indigo-500 font-medium">{profileData.email}</p>
+          <span className="inline-block text-[10px] px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-500 font-semibold border border-indigo-500/30 mt-1">
             Student Account
           </span>
+        </div>
+        </div>
+
+        <div className="glass-card p-4 w-full lg:w-80 bg-theme-secondary">
+          <div className="flex items-center gap-3">
+            <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-500">
+              <Crown size={22} />
+            </div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-theme-muted">Current Plan</p>
+              <h3 className="text-xl font-extrabold text-theme-primary">{subscription?.planName || 'Free'}</h3>
+            </div>
+          </div>
+          <p className="text-sm font-semibold text-theme-secondary mt-3">
+            {subscription?.monthlyTestLimit === -1
+              ? 'Unlimited monthly test attempts'
+              : `${subscription?.monthlyTestLimit || 5} monthly test attempts`}
+          </p>
+          <Link to="/student/subscription" className="btn btn-primary w-full mt-4 text-sm py-2.5">
+            <CreditCard size={16} />
+            Manage Subscription
+          </Link>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Update Profile Form */}
         <div className="glass-card p-6 space-y-6">
-          <h3 className="text-base font-bold text-slate-200 border-b border-slate-700/60 pb-3 flex items-center gap-2">
-            <User size={18} className="text-indigo-400" /> Update Personal Information
+          <h3 className="text-base font-bold text-theme-primary border-b border-theme pb-3 flex items-center gap-2">
+            <User size={18} className="text-indigo-500" /> Update Personal Information
           </h3>
 
           {profileMsg.text && (
@@ -189,8 +215,8 @@ const MyProfile = () => {
 
         {/* Change Password Form */}
         <div className="glass-card p-6 space-y-6">
-          <h3 className="text-base font-bold text-slate-200 border-b border-slate-700/60 pb-3 flex items-center gap-2">
-            <Lock size={18} className="text-purple-400" /> Security & Change Password
+          <h3 className="text-base font-bold text-theme-primary border-b border-theme pb-3 flex items-center gap-2">
+            <Lock size={18} className="text-purple-500" /> Security & Change Password
           </h3>
 
           {passwordMsg.text && (
@@ -240,7 +266,7 @@ const MyProfile = () => {
             <button
               type="submit"
               disabled={loadingPass}
-              className="w-full btn btn-secondary py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 border-purple-500/30 text-purple-300"
+              className="w-full btn btn-secondary py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 border-purple-500/30 text-purple-500"
             >
               <Lock size={16} />
               {loadingPass ? 'Updating...' : 'Change Password'}
