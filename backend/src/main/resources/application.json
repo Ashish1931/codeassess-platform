@@ -14,7 +14,7 @@
     "datasource": {
       "url": "${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/codeassess_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}",
       "username": "${SPRING_DATASOURCE_USERNAME:root}",
-      "password": "${SPRING_DATASOURCE_PASSWORD:root}",
+      "password": "${SPRING_DATASOURCE_PASSWORD:Apple123!@#}",
       "hikari": {
         "connection-timeout": 15000,
         "maximum-pool-size": 10,
